@@ -8,14 +8,17 @@ var h =
   document.documentElement.clientHeight ||
   document.body.clientHeight
 
-let m = new Mandelbrot(w, h)
+let m;
 
 function setup() {
   createCanvas(w, h)
   background(0)
   fullscreen()
+  m = new Mandelbrot(w, h, 2, 2, .25, 1)
+  m.buffer()
 }
 
 function draw() {
+  clear()
   m.draw()
 }
