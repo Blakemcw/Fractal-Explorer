@@ -1,13 +1,14 @@
-* { 
-    margin: 0; 
-    padding: 0;
+* {
+  margin: 0;
+  padding: 0;
 }
 
-body, html {
-    height:100vh; 
-    overflow: hidden;
+body,
+html {
+  height: 100vh;
+  overflow: hidden;
 }
 
 canvas {
-    margin: 0;
+  margin: 0;
 }
