@@ -157,6 +157,13 @@ function draw() {
   }
 }
 
+// =============================================================================
+// Mouse Controls
+// =============================================================================
+
+/* 
+ * Zooming 
+ */
 function mouseWheel(e) {
   /**
    * P5.js function called when the mouse is scrolled.
@@ -172,6 +179,39 @@ function mouseWheel(e) {
 
   // block page scrolling
   return false
+}
+
+/* 
+ * Panning
+ */
+let posOnClickX, posOnClickY
+document.addEventListener('mousedown', (e) => {
+  /**
+   * Used to get the initial mouse position for dragging to pan functionality.
+   * @param e Event fired on mousedown
+   * @see mouseDragged()
+   */
+  posOnClickX = e.clientX
+  posOnClickY = e.clientY
+})
+
+function mouseDragged (e) {
+  /**
+   * Finds out how far to pan the screen on drag.
+   * @param e Event fired on drag
+   */
+  
+  /* Get the change from the last position */
+  let deltaX = e.clientX - posOnClickX
+  let deltaY = e.clientY - posOnClickY
+
+  /* Update the position on the canvas for smooth panning */
+  Canvas.x += deltaX / Canvas.zoom
+  Canvas.y += deltaY / Canvas.zoom
+
+  /* Save last position for next deltaX/Y calculation */
+  posOnClickX = e.clientX
+  posOnClickY = e.clientY
 }
 
 
