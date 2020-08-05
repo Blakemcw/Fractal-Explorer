@@ -4,7 +4,7 @@
  */
 
 let m
-let DEBUG = false;
+let DEBUG = false
 
 var Canvas = {
   /* Window size */
