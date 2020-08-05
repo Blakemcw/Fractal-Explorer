@@ -3,24 +3,51 @@
  * @author Blakemcw
  */
 
-let m
-let DEBUG = false
+// =============================================================================
+// Global Variables
+// =============================================================================
 
+let m  // Holds Mandelbrot set
+let DEBUG = false  // Sets if in debug mode (enabled with v key)
+
+
+// =============================================================================
+// Namespaces
+// =============================================================================
+
+/**
+ * Canvas namespace.
+ * @namespace
+ */
 var Canvas = {
-  /* Window size */
+  /* Sizing Variables */
+
+  /** Window width */
   width: window.innerWidth 
     || document.documentElement.clientWidth
     || document.body.clientWidth,
 
+  /** Window Height */
   height: window.innerHeight
     || document.documentElement.clientHeight 
     || document.body.clientHeight,
-  
-  /* Positional variables */
+
+  /* Positional Variables */
+
+  /** Tracks the zoom for the current frame */
   zoom: 1.0,
+
+  /** The current x coordinate for center screen */
   x: 0.0,
+
+  /** The current y coordinate for center screen */
   y: 0.0,
 }
+
+
+// =============================================================================
+// Helper Functions
+// =============================================================================
 
 let handleZoom = () => {
   /**
@@ -85,6 +112,11 @@ let redrawAtScale = () => {
   m.buffer()
 }
 
+
+// =============================================================================
+// P5.js Build-in Functions
+// =============================================================================
+
 function setup() {
   /**
    * Setup function for P5.js.
@@ -125,6 +157,28 @@ function draw() {
   }
 }
 
+function mouseWheel(e) {
+  /**
+   * P5.js function called when the mouse is scrolled.
+   * @param {object} e Event fired when mouse is scrolled
+   * @return {boolean} Whether or not to block page scrolling
+   */
+  
+  if (e.deltaY > 0) { /* scrolling in */
+    Canvas.zoom *= 1.02
+  } else { /* scrolling out */
+    Canvas.zoom *= 0.98
+  }
+
+  // block page scrolling
+  return false
+}
+
+
+// =============================================================================
+// Keyboard Controls
+// =============================================================================
+
 document.addEventListener('keydown', function(e) {
   /**
    * Handles all keypresses.
@@ -153,20 +207,3 @@ document.addEventListener('keydown', function(e) {
   /* Draw with updated position */
   draw()
 })
-
-function mouseWheel(e) {
-  /**
-   * P5.js function called when the mouse is scrolled.
-   * @param {object} e Event fired when mouse is scrolled
-   * @return {boolean} Whether or not to block page scrolling
-   */
-  
-  if (e.deltaY > 0) { /* scrolling in */
-    Canvas.zoom *= 1.02
-  } else { /* scrolling out */
-    Canvas.zoom *= 0.98
-  }
-
-  // block page scrolling
-  return false
-}
