@@ -17,29 +17,6 @@ class Mandelbrot {
     
     /* Buffer */
     this.buff = createGraphics(_width, _height)
-    
-    /**
-     * Color gradient for rendering.
-     * @TODO Precompute 255 color gradient values and store in another file called colors.js
-     */
-    this.colors = {
-      0:  color( 66,  30,  15),
-      1:  color( 25,   7,  26),
-      2:  color(  9,   1,  47),
-      3:  color(  4,   4,  73),
-      4:  color(  0,   7, 100),
-      5:  color( 12,  44, 138),
-      6:  color( 24,  82, 177),
-      7:  color( 57, 125, 209),
-      8:  color(134, 181, 229),
-      9:  color(211, 236, 248),
-      10: color(241, 233, 191),
-      11: color(248, 201,  95),
-      12: color(255, 170,   0),
-      13: color(204, 128,   0),
-      14: color(153,  87,   0),
-      15: color(106,  52,   3),
-    }
   }
 
   _scale(num, minVal, maxVal, lRange, rRange) {
@@ -94,7 +71,7 @@ class Mandelbrot {
      * @see this.buffer()
      * @see this.colors
      */
-    return (iter === iterations) ? color(0) : this.colors[iter%16]
+    return (iter === iterations) ? color(0) : COLOR_MAP[iter%255]
   }
 
   buffer() {
