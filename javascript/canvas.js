@@ -123,7 +123,6 @@ function setup() {
    * @return {null}
    */
   createCanvas(Canvas.width, Canvas.height)
-  background(0) // set background black
   fullscreen()
   m = new Mandelbrot(Canvas.width, Canvas.height)
   m.buffer()
@@ -136,6 +135,7 @@ function draw() {
    */
 
   clear()
+  background(0) // set background black
 
   /* Handle Mandelbrot set drawing */
   push()
