@@ -1,24 +1,27 @@
-let scaleFactor = 1
+let scaleFactor = 2
 let iterations = 100
 let power = 2
 
 class Mandelbrot {
-  constructor(_width = 0, _height = 0, _lx=1, _ly=1, _xPos=0, _yPos=0) {
+  constructor(_width = 0, _height = 0, _xlBound=-2.5, _xrBound=1.0, _ylBound=-1.0, _yrBound=1.0) {
     this.width = _width / scaleFactor
     this.height = _height / scaleFactor
 
-    // Control the frame/zoom of image
-    this.lx = _lx
-    this.ly = _ly
+    /* Left and right bounds for x axis */
+    this.xlBound = _xlBound
+    this.xrBound = _xrBound
 
-    // Control the center of focus
-    this.xPos = _xPos
-    this.yPos = _yPos
+    /* Left and right bounds for y axis */
+    this.ylBound = _ylBound
+    this.yrBound = _yrBound
     
-    // Buffer
+    /* Buffer */
     this.buff = createGraphics(_width, _height)
     
-    // Color gradient for rendering
+    /**
+     * Color gradient for rendering.
+     * @TODO Precompute 255 color gradient values and store in another file called colors.js
+     */
     this.colors = {
       0:  color( 66,  30,  15),
       1:  color( 25,   7,  26),
@@ -40,6 +43,16 @@ class Mandelbrot {
   }
 
   _scale(num, minVal, maxVal, lRange, rRange) {
+    /**
+     * Scales a number from one range to another.
+     * @param {number} num Number to scale
+     * @param {number} minVal Minimum value of num
+     * @param {number} maxVal Maximum value of num
+     * @param {number} lRange Left bound of range to scale to
+     * @param {number} rRange Right bound of range to scale to
+     * 
+     * @return {number} Scaled value of num
+     */
     // Get number in range [0,1]
     let normalized = (num - minVal) / (maxVal - minVal)
 
@@ -48,8 +61,15 @@ class Mandelbrot {
   }
 
   _calculatePixel(Px, Py) {
-    let x0 = this._scale(Px, 0.0, this.width,  -2.5, 1.0) * (1/this.lx) + this.xPos
-    let y0 = this._scale(Py, 0.0, this.height, -1.0, 1.0) * (1/this.ly) + this.yPos
+    /**
+     * Finds if a given pixel is in the Mandlebrot set.
+     * @param {number} Px x-coordinate of pixel
+     * @param {number} Py y-coordinate of pixel
+     * 
+     * @link https://en.wikipedia.org/wiki/Mandelbrot_set#Computer_drawings
+     */
+    let x0 = this._scale(Px, 0.0, this.width,  this.xlBound, this.xrBound)
+    let y0 = this._scale(Py, 0.0, this.height, this.ylBound, this.yrBound)
 
     let x = 0.0
     let y = 0.0
@@ -69,11 +89,20 @@ class Mandelbrot {
   }
 
   _setColor(iter) {
+    /**
+     * Sets the color based on how many iterations it took to find out if pixel is in set.
+     * @see this.buffer()
+     * @see this.colors
+     */
     return (iter === iterations) ? color(0) : this.colors[iter%16]
   }
 
   buffer() {
-    this.buff = createGraphics(this.width, this.height)
+    /**
+     * Buffers drawing of the Mandelbrot set.
+     * For each pixel on the screen the iteration it reaches is found and colored.
+     */
+    this.buff = createGraphics(this.width*scaleFactor, this.height*scaleFactor)
     for (let x = 0; x < this.width; ++x) {
       for (let y = 0; y < this.height; ++y) {
         let iter = this._calculatePixel(x, y)
@@ -84,7 +113,13 @@ class Mandelbrot {
     }
   }
 
-  draw() {
+  draw(x=0, y=0) {
+    /**
+     * Draw function for the Mandelbrot set.
+     * Takes the values computed in bufffer and writes them to the screen.
+     * @param {number} x x coordinate to start drawing from
+     * @param {number} y y coordinate to start drawing from
+     */
     image(this.buff, 0, 0)
   }
 }
